@@ -1,11 +1,4 @@
-SELECT *
-FROM [dbo].[CovidVaccinations]
-where continent is not null
-ORDER BY 3, 4 --ORDER BY KOLOM KE BERAPA
 
---SELECT *
---FROM PortofolioProject..CovidDeaths
---ORDER BY 3, 4 --ORDER BY KOLOM KE BERAPA
 
 --SELECT DATA THAT WE ARE GOING TO USING
 
@@ -77,7 +70,7 @@ order by 1,2
 
 
 
---Resfresh Covid Vaccinations
+--Covid Vaccinations
 select *
 from PortofolioProject..CovidVaccinations
 
@@ -119,30 +112,6 @@ where dea.continent is not null
 select *, RolingPeopleVaccinated/population*100
 from PopvsVac
 
-
---USING TEMP TABLE  i dont why but is not susscess for me (check again later)
-drop table if exists #PercentPopulationVaccinated --recommend if you want to make some alterations
-create table #PercentPopulationVaccinated
-(
-continent nvarchar(255),
-location nvarchar(255),
-date datetime,
-population numeric,
-new_vaccinations numeric,
-RollingPeopleVaccinated numeric
-)
-
-insert into #PercentPopulationVaccinated
-SELECT dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations
-,sum(convert(int,vac.new_vaccinations)) over (partition by dea.location order by dea.location, dea.date) as RollingPeopleVaccinated
-FROM PortofolioProject..CovidDeaths dea
-join PortofolioProject..CovidVaccinations vac
-on dea.location = vac.location
-and dea.date = vac.date
---where dea.continent is not null
-
-select *, RolingPeopleVaccinated/population*100
-from #PercentPopulationVaccinated
 
 
 --CREATING VIEW TO STORE DATA FOR LATER VISUALIZATIONS
